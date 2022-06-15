@@ -1,5 +1,5 @@
 from django_filters import rest_framework as django_filters
-from . import models
+from recipes import models
 
 
 class IngredientFilter(django_filters.FilterSet):
@@ -10,6 +10,7 @@ class IngredientFilter(django_filters.FilterSet):
 
     class Meta:
         model = models.Ingredient
+        # TODO: icontains не будет так работать
         fields = {'name': ['istartswith', 'icontains']}
 
 

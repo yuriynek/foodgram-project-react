@@ -72,7 +72,6 @@ class RecipeTag(models.Model):
         ordering = ('recipe',)
         verbose_name = 'Рецепт-Тег'
         verbose_name_plural = 'Рецепты-Теги'
-        # TODO: нужно ли данное ограничение
         constraints = [
             models.UniqueConstraint(
                 fields=('recipe', 'tag'),
