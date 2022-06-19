@@ -1,7 +1,8 @@
-from rest_framework import serializers, exceptions
-import uuid
-from django.core.files.base import ContentFile
 import base64
+import uuid
+
+from django.core.files.base import ContentFile
+from rest_framework import exceptions, serializers
 
 
 class ImageFromBase64Field(serializers.ImageField):
@@ -15,5 +16,6 @@ class ImageFromBase64Field(serializers.ImageField):
                 name=f'{image_id}.{extension}'
             )
         except exceptions.APIException:
-            raise serializers.ValidationError('Ошибка декодирования изображения')
+            raise serializers.ValidationError(
+                'Ошибка декодирования изображения')
         return super().to_internal_value(data)

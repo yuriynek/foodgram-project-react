@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin.decorators import register
-from .models import User, Subscription
+
+from .models import Subscription, User
 
 
 @register(User)

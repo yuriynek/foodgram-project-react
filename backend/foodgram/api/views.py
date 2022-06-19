@@ -1,16 +1,17 @@
 from django.contrib.auth import get_user_model
-from djoser.serializers import SetPasswordSerializer
-from rest_framework import viewsets, mixins, status
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from django_filters import rest_framework as django_filters
-from rest_framework import permissions
-from recipes import models
-from users.users_services import get_user_subscriptions
-from . import serializers, filters
 from django.db.models import Count
 from django.db.models.functions import Lower
-from recipes.recipes_services import (get_txt_report, get_pdf_report)
+from django_filters import rest_framework as django_filters
+from djoser.serializers import SetPasswordSerializer
+from rest_framework import mixins, permissions, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
+from recipes import models
+from recipes.recipes_services import get_pdf_report, get_txt_report
+from users.users_services import get_user_subscriptions
+
+from . import filters, serializers
 from .mixins import ReadOnlyAnyNoPaginationMixinViewSet
 from .permissions import IsAuthorOrReadOnlyPermission
 

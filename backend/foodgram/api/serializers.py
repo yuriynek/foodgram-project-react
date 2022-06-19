@@ -1,12 +1,11 @@
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
+from rest_framework import serializers
 
 from api.fields import ImageFromBase64Field
 from api.mixins import FlattenMixinSerializer
-from users.models import Subscription
-from rest_framework import serializers
 from recipes import models, recipes_services
-from django.shortcuts import get_object_or_404
-
+from users.models import Subscription
 
 User = get_user_model()
 
@@ -18,9 +17,11 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'id', 'email', 'username', 'first_name', 'last_name', 'is_subscribed')
+            'id', 'email', 'username', 'first_name', 'last_name',
+            'is_subscribed')
         read_only_fields = (
-            'id', 'email', 'username', 'first_name', 'last_name', 'is_subscribed')
+            'id', 'email', 'username', 'first_name', 'last_name',
+            'is_subscribed')
 
     def get_is_subscribed(self, user):
         subscriber = self.context.get('request').user
@@ -35,7 +36,8 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'email', 'username', 'first_name', 'last_name', 'password')
+        fields = ('id', 'email', 'username', 'first_name', 'last_name',
+                  'password')
         required_fields = '__all__'
         extra_kwargs = {
             'id': {'read_only': True},
@@ -65,10 +67,12 @@ class IngredientSerializer(serializers.ModelSerializer):
 class RecipeIngredientSerializer(serializers.ModelSerializer):
 
     id = serializers.PrimaryKeyRelatedField(
-        queryset=models.Ingredient.objects.all().values_list('pk', flat=True),
+        queryset=models.Ingredient.objects.all().values_list(
+            'pk', flat=True),
     )
     name = serializers.ReadOnlyField(source='ingredient.name')
-    measurement_unit = serializers.ReadOnlyField(source='ingredient.measurement_unit')
+    measurement_unit = serializers.ReadOnlyField(
+        source='ingredient.measurement_unit')
 
     class Meta:
         model = models.RecipeIngredient
@@ -117,7 +121,8 @@ class RecipeSerializer(serializers.ModelSerializer):
         fields = ('id', 'tags', 'author', 'ingredients', 'is_favorited',
                   'is_in_shopping_cart', 'name', 'image', 'text',
                   'cooking_time')
-        read_only_fields = ('id', 'author', 'is_favorited', 'is_in_shopping_cart')
+        read_only_fields = ('id', 'author', 'is_favorited',
+                            'is_in_shopping_cart')
 
     def get_is_favorited(self, recipe):
         user = self.context.get('request').user
@@ -232,7 +237,8 @@ class SubscribeUserSerializer(FlattenMixinSerializer,
             subscribed=data['subscribed']
         )
         if not subscription.exists():
-            raise serializers.ValidationError('Ошибка - такой подписки не существует')
+            raise serializers.ValidationError(
+                'Ошибка - такой подписки не существует')
         subscription.delete()
 
 
@@ -265,7 +271,8 @@ class ShoppingCartSerializer(FlattenMixinSerializer,
             user=data['user']
         )
         if not user_recipe.exists():
-            raise serializers.ValidationError('Ошибка - такой записи не существует!')
+            raise serializers.ValidationError(
+                'Ошибка - такой записи не существует!')
         user_recipe.delete()
 
 

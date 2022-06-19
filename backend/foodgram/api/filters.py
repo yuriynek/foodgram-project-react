@@ -1,8 +1,7 @@
 from django_filters import rest_framework as django_filters
-from recipes import models
 from rest_framework import filters
-from recipes import recipes_services
-from users.models import Subscription
+
+from recipes import models, recipes_services
 
 
 class IngredientFilter(django_filters.FilterSet):

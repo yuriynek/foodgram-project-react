@@ -34,7 +34,7 @@ $ python manage.py migrate
 ```
 5. При желании загрузить сырой файл с тестовой базой данных:
 ```commandline
-$ python manage.py loaddata < fixtures.json
+$ python manage.py loaddata fixtures
 ```
 6. Запустить сервер:
 ```commandline

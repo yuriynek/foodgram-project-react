@@ -1,18 +1,21 @@
 # Модуль, в котором содержится логика работы приложения:
 # обращения к БД, генерация отчетов и т.д.
 
-from recipes import models
-from django.shortcuts import get_object_or_404
-from django.db.models import Sum
-from django.contrib.auth import get_user_model
 import io
-from django.http import FileResponse, HttpResponse
-from reportlab.pdfgen import canvas
-from reportlab.pdfbase import pdfmetrics
-from reportlab.lib.units import cm
-from reportlab.pdfbase.ttfonts import TTFont
-from .models import Recipe
 from collections import Iterable
+
+from django.contrib.auth import get_user_model
+from django.db.models import Sum
+from django.http import FileResponse, HttpResponse
+from django.shortcuts import get_object_or_404
+from reportlab.lib.units import cm
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen import canvas
+
+from recipes import models
+
+from .models import Recipe
 
 User = get_user_model()
 

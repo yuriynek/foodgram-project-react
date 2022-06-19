@@ -1,7 +1,6 @@
-from django.db import models
-from django.core import validators
 from django.contrib.auth import get_user_model
-
+from django.core import validators
+from django.db import models
 
 User = get_user_model()
 
@@ -50,9 +49,11 @@ class Recipe(models.Model):
         to=User,
         related_name='recipes',
         on_delete=models.CASCADE)
-    tags = models.ManyToManyField(verbose_name='Теги', to=Tag, through='RecipeTag')
+    tags = models.ManyToManyField(verbose_name='Теги', to=Tag,
+                                  through='RecipeTag')
     ingredients = models.ManyToManyField(
-        verbose_name='Ингредиенты', to=Ingredient, through='RecipeIngredient',)
+        verbose_name='Ингредиенты', to=Ingredient,
+        through='RecipeIngredient',)
 
     class Meta:
         ordering = ('-pub_date',)
@@ -64,8 +65,10 @@ class Recipe(models.Model):
 
 
 class RecipeTag(models.Model):
-    recipe = models.ForeignKey(verbose_name='Рецепт', to=Recipe, on_delete=models.CASCADE)
-    tag = models.ForeignKey(verbose_name='Тег', to=Tag, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(verbose_name='Рецепт', to=Recipe,
+                               on_delete=models.CASCADE)
+    tag = models.ForeignKey(verbose_name='Тег', to=Tag,
+                            on_delete=models.CASCADE)
 
     class Meta:
         ordering = ('recipe',)
@@ -155,4 +158,3 @@ class ShoppingCart(models.Model):
                 name='unique_user_recipe_shopping'
             )
         ]
-
