@@ -8,42 +8,45 @@ from .models import (Tag, Ingredient, Recipe, RecipeTag,
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'color', 'slug')
     search_fields = ('slug',)
-    # list_editable = ('name', 'slug',)
 
 
 @register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ('name', 'measurement_unit',)
+    list_filter = ('name',)
     search_fields = ('name',)
-    # list_editable = ('name', 'measurement_unit',)
 
 
 @register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('pub_date', 'name', 'author',)
+    list_display = ('name', 'author', 'in_favorite_counts')
     search_fields = ('name',)
-    filter_fields = ('pub_date', 'tags', 'ingredients',)
+    list_filter = ('author', 'name', 'tags')
+    readonly_fields = ('in_favorite_counts',)
+
+    @admin.display(description='Количество добавлений в избранное')
+    def in_favorite_counts(self, recipe):
+        return recipe.favorite_recipes.count()
 
 
 @register(RecipeTag)
 class RecipeTagAdmin(admin.ModelAdmin):
     list_display = ('recipe', 'tag')
-    # list_editable = ('recipe', 'tag')
-    filter_fields = ('tag',)
+    list_filter = ('tag',)
     search_fields = ('recipe',)
 
 
 @register(RecipeIngredient)
 class RecipeIngredientAdmin(admin.ModelAdmin):
-    list_display = ('recipe', 'ingredient')
-    # list_editable = ('recipe', 'ingredient')
-    filter_fields = ('ingredient',)
-    search_fields = ('recipe',)
+    list_display = ('recipe', 'ingredient', 'amount')
+    list_filter = ('recipe',)
+    search_fields = ('ingredient',)
 
 
 @register(Favorite)
 class FavoriteAdmin(admin.ModelAdmin):
     list_display = ('user', 'recipe')
+    list_filter = ('user',)
     search_fields = ('user',)
 
 

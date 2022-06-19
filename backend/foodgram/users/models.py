@@ -7,6 +7,9 @@ class User(AbstractUser):
     last_name = models.CharField('Фамилия', max_length=150)
     email = models.EmailField('Email', unique=True)
 
+    def __str__(self):
+        return f'{self.username} - {self.first_name} {self.last_name}'
+
 
 class Subscription(models.Model):
     subscriber = models.ForeignKey(
@@ -25,3 +28,5 @@ class Subscription(models.Model):
                 name='unique_subscriber_subscribed'
             )
         ]
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'

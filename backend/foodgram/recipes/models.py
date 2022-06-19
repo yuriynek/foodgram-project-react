@@ -36,7 +36,6 @@ class Ingredient(models.Model):
 
 class Recipe(models.Model):
     name = models.CharField('Название', max_length=200)
-    # TODO: подумать над огранизацией хранения и своевременного удаления изображения
     image = models.ImageField('Изображение', upload_to='images/%Y/%m/%d/')
     text = models.TextField('Текст')
     cooking_time = models.IntegerField(

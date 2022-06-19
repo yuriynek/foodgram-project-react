@@ -1,24 +1,19 @@
 from django_filters import rest_framework as django_filters
 from recipes import models
+from rest_framework import filters
+from recipes import recipes_services
+from users.models import Subscription
 
 
 class IngredientFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(
         field_name='name',
-        lookup_expr='istartswith',
+        lookup_expr='icontains',
     )
 
     class Meta:
         model = models.Ingredient
-        # TODO: icontains не будет так работать
-        fields = {'name': ['istartswith', 'icontains']}
-
-
-def favorites(request):
-    if request is None:
-        return models.Recipe.objects.none()
-    return models.Recipe.objects.filter(
-        id__in=request.user.favorites.all().values_list('recipe', flat=True))
+        fields = ('name',)
 
 
 class RecipeFilter(django_filters.FilterSet):
@@ -30,13 +25,35 @@ class RecipeFilter(django_filters.FilterSet):
         field_name='tags__slug',
         lookup_expr='exact'
     )
-    is_favorited = django_filters.ModelChoiceFilter(
-        queryset=favorites
+    is_favorited = django_filters.BooleanFilter(
+        method='show_favorited'
+    )
+    is_in_shopping_cart = django_filters.BooleanFilter(
+        method='show_shopping_cart'
     )
 
     class Meta:
         model = models.Recipe
         fields = ('author', 'tags', 'is_favorited')
 
+    def show_favorited(self, queryset, name, value):
+        if value:
+            return recipes_services.get_user_favorite_recipes(
+                self.request.user)
+        return queryset.all()
+
+    def show_shopping_cart(self, queryset, name, value):
+        if value:
+            return recipes_services.get_user_shopping_cart_recipes(
+                self.request.user)
+        return queryset.all()
 
 
+class LimitRecipesFilterBackend(filters.BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+        query_param = request.query_params.get('recipes_limit')
+        try:
+            return queryset[0:int(query_param)]
+        except TypeError:
+            return queryset
