@@ -1,10 +1,14 @@
 from pathlib import Path
 import os
 
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# TODO: hide the secret key
-SECRET_KEY = 'django-insecure-3v&u(s6g$vxfe=wt!*jvp9!s==z=wtr#+oad--h^tux*cn1m(4'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
 
