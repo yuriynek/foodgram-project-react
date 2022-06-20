@@ -15,27 +15,36 @@ from reportlab.pdfgen import canvas
 
 from recipes import models
 
-from .models import Recipe
+
+# Настройки полей для страницы со списком покупок в PDF
+PDF_REPORT_PAGE_WIDTH = 29.7 * cm
+PDF_REPORT_LEFT_MARGIN = 2 * cm
+PDF_REPORT_TOP_MARGIN = 2 * cm
+
 
 User = get_user_model()
 
 
-def create_tags_in_recipe(tags: Iterable, recipe: Recipe) -> None:
-    for tag in tags:
-        models.RecipeTag.objects.create(
+def create_tags_in_recipe(tags: Iterable, recipe: models.Recipe) -> None:
+    models.RecipeTag.objects.bulk_create([
+        models.RecipeTag(
             recipe=recipe,
-            tag=get_object_or_404(models.Tag, pk=tag.get('id')))
+            tag=get_object_or_404(models.Tag, pk=tag.get('id'))
+        )
+        for tag in tags])
     return None
 
 
 def create_ingredients_in_recipe(
-        ingredients: Iterable, recipe: Recipe) -> None:
-    for ingredient_in_recipe in ingredients:
-        models.RecipeIngredient.objects.create(
+        ingredients: Iterable, recipe: models.Recipe) -> None:
+    models.RecipeIngredient.objects.bulk_create([
+        models.RecipeIngredient(
             recipe=recipe,
             ingredient=get_object_or_404(
                 models.Ingredient, pk=ingredient_in_recipe.get('id')),
-            amount=ingredient_in_recipe.get('amount'))
+            amount=ingredient_in_recipe.get('amount')
+        )
+        for ingredient_in_recipe in ingredients])
     return None
 
 
@@ -71,7 +80,9 @@ def get_pdf_report(request, filename: str) -> FileResponse:
     pdfmetrics.registerFont(TTFont('VeraBI', 'VeraBI.ttf'))
     pdf.setFont('Vera', 16)
     shopping_list = _get_shopping_list(request.user)
-    textobject = pdf.beginText(2 * cm, 29.7 * cm - 2 * cm)
+    textobject = pdf.beginText(
+        PDF_REPORT_LEFT_MARGIN,
+        PDF_REPORT_PAGE_WIDTH - PDF_REPORT_TOP_MARGIN)
     textobject.textLine('SHOPPING LIST:')
 
     num = 1

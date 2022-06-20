@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.db.models import Count
 from django.db.models.functions import Lower
 from django_filters import rest_framework as django_filters
 from djoser.serializers import SetPasswordSerializer
@@ -10,7 +9,6 @@ from rest_framework.response import Response
 from recipes import models
 from recipes.recipes_services import get_pdf_report, get_txt_report
 from users.users_services import get_user_subscriptions
-
 from . import filters, serializers
 from .mixins import ReadOnlyAnyNoPaginationMixinViewSet
 from .permissions import IsAuthorOrReadOnlyPermission
@@ -23,7 +21,7 @@ class UserViewSet(mixins.ListModelMixin,
                   mixins.CreateModelMixin,
                   viewsets.GenericViewSet):
 
-    queryset = User.objects.annotate(recipes_count=Count('recipes'))
+    queryset = User.objects.all()
 
     def get_permissions(self):
         if (self.action not in (

@@ -164,7 +164,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 class FilterListSerializer(serializers.ListSerializer):
     """
     Сериализатор для фильрации выдачи количества рецептов в поле
-    recipes  отображении подписок
+    recipes при отображении подписок
     """
     def to_representation(self, data):
         value = self.context.get('request').query_params.get('recipes_limit')
@@ -191,16 +191,12 @@ class ExtendedUserSerializer(UserSerializer):
 
     recipes = CompactRecipeSerializer(read_only=True, many=True)
 
-    # через annotate почему-то не работает - не отображается поле:
-    # recipes_count = serializers.IntegerField(read_only=True)
-    # поэтому сделал через SerializerMethodFeild:
-    recipes_count = serializers.SerializerMethodField()
+    recipes_count = serializers.IntegerField(
+        read_only=True,
+        source='recipes.count')
 
     class Meta(UserSerializer.Meta):
         fields = UserSerializer.Meta.fields + ('recipes', 'recipes_count')
-
-    def get_recipes_count(self, user):
-        return user.recipes.count()
 
 
 class SubscribeUserSerializer(FlattenMixinSerializer,
