@@ -13,10 +13,7 @@ services:
     volumes:
       - ../frontend/:/app/result_build/
   backend:
-#    image: ${{ secrets.DOCKER_USERNAME }}/foodgram:latest
-    build:
-      context: ../backend/
-      dockerfile: Dockerfile
+    image: yuriynekrasov/foodgram:v28.06.2022
     restart: always
     volumes:
       - ./static_value:/app/foodgram/backend_static/
