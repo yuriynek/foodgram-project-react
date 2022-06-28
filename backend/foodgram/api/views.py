@@ -26,7 +26,7 @@ class UserViewSet(mixins.ListModelMixin,
     def get_permissions(self):
         if (self.action not in (
                 'me', 'set_password', 'subscribe', 'subscriptions')
-                and self.request.method in permissions.SAFE_METHODS):
+                or self.request.method in permissions.SAFE_METHODS):
             self.permission_classes = (permissions.AllowAny,)
         return super().get_permissions()
 
@@ -111,7 +111,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.request.method in permissions.SAFE_METHODS:
             self.permission_classes = (permissions.AllowAny,)
-        if self.request.method in ('PUT', 'PATCH', 'DELETE'):
+        if (self.request.method in ('PUT', 'PATCH')
+                or self.action == 'delete'):
             self.permission_classes = (IsAuthorOrReadOnlyPermission,)
         return super().get_permissions()
 

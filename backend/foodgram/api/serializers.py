@@ -153,12 +153,16 @@ class RecipeSerializer(serializers.ModelSerializer):
     def update(self, recipe, validated_data):
         tags = validated_data.pop('tags')
         ingredients = validated_data.pop('ingredients_in_recipe')
+        image = validated_data.pop('image')
         models.RecipeTag.objects.filter(recipe=recipe).delete()
         models.RecipeIngredient.objects.filter(recipe=recipe).delete()
         models.Recipe.objects.filter(pk=recipe.pk).update(**validated_data)
         recipes_services.create_tags_in_recipe(tags, recipe)
         recipes_services.create_ingredients_in_recipe(ingredients, recipe)
-        return recipe
+        new_recipe = get_object_or_404(models.Recipe, pk=recipe.pk)
+        new_recipe.image = image
+        new_recipe.save()
+        return new_recipe
 
 
 class FilterListSerializer(serializers.ListSerializer):

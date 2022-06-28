@@ -16,6 +16,7 @@ djangorestframework-simplejwt==4.8.0
 djoser==2.1.0
 flake8==4.0.1
 fpdf==1.7.2
+gunicorn==20.1.0
 idna==3.3
 iniconfig==1.1.1
 isort==5.10.1
@@ -27,6 +28,7 @@ oauthlib==3.2.0
 packaging==21.3
 Pillow==9.1.0
 pluggy==1.0.0
+psycopg2-binary==2.8.6
 py==1.11.0
 pycodestyle==2.8.0
 pycparser==2.21
@@ -35,6 +37,7 @@ PyJWT==2.3.0
 pyparsing==3.0.7
 pytest==7.1.1
 pytest-django==4.5.2
+python-dotenv==0.20.0
 python3-openid==3.2.0
 pytz==2022.1
 reportlab==3.6.9

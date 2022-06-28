@@ -130,3 +130,7 @@ dmypy.json
 
 # .idea
 .idea
+/infra/media_value/
+/infra/static_value/
+/infra/postgres_data/
+/infra/db_data/

@@ -5,10 +5,8 @@ from django.core.management.base import BaseCommand
 
 from recipes import models
 
-# TODO: доделать
-
 DIR_NAME = os.path.dirname(__file__)
-CSV_DATA_PATH = os.path.join(DIR_NAME, '../../../../../data/')
+CSV_DATA_PATH = os.path.join(DIR_NAME, '../../../data/')
 
 FILE_MODEL_DICT = {
     'ingredients.csv': models.Ingredient,

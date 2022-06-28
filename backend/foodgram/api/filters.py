@@ -20,10 +20,12 @@ class RecipeFilter(django_filters.FilterSet):
         field_name='author__id',
         lookup_expr='exact'
     )
-    tags = django_filters.CharFilter(
+
+    tags = django_filters.AllValuesMultipleFilter(
         field_name='tags__slug',
-        lookup_expr='exact'
+        lookup_expr='icontains'
     )
+
     is_favorited = django_filters.BooleanFilter(
         method='show_favorited'
     )
@@ -33,18 +35,18 @@ class RecipeFilter(django_filters.FilterSet):
 
     class Meta:
         model = models.Recipe
-        fields = ('author', 'tags', 'is_favorited')
+        fields = ('author', 'tags', 'is_favorited', 'is_in_shopping_cart')
 
     def show_favorited(self, queryset, name, value):
         if value:
             return recipes_services.get_user_favorite_recipes(
-                self.request.user)
+                user=self.request.user, queryset=queryset)
         return queryset.all()
 
     def show_shopping_cart(self, queryset, name, value):
         if value:
             return recipes_services.get_user_shopping_cart_recipes(
-                self.request.user)
+                user=self.request.user, queryset=queryset)
         return queryset.all()
 
 

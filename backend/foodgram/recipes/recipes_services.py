@@ -109,14 +109,16 @@ def _get_shopping_list(user: User) -> Iterable:
     ).annotate(shop_amount=Sum('recipes__amount'))
 
 
-def get_user_favorite_recipes(user: User) -> Iterable:
-    return models.Recipe.objects.filter(
+def get_user_favorite_recipes(user: User,
+                              queryset: Iterable) -> Iterable:
+    return queryset.filter(
         id__in=user.favorites.all().values_list(
             'recipe', flat=True)
     )
 
 
-def get_user_shopping_cart_recipes(user: User) -> Iterable:
+def get_user_shopping_cart_recipes(user: User,
+                                   queryset: Iterable) -> Iterable:
     return models.Recipe.objects.filter(
         id__in=user.shopping_cart.values_list(
             'recipe', flat=True)
