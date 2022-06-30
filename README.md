@@ -51,11 +51,8 @@ $ sudo docker-compose exec backend python manage.py migrate
 $ sudo docker-compose exec backend python manage.py createsuperuser
 $ sudo docker-compose exec backend python manage.py collectstatic
 ```
-6. Запустить сервер:
-```commandline
-$ python manage.py runserver
-```
-7. После выполненных шагов проект с админкой будет готов к работе:
+
+5. После выполненных шагов проект с админкой будет готов к работе:
 * http://localhost/ - Главная страница
 * http://localhost/api/ - API
 * http://localhost/api/docs/ - Документация к API

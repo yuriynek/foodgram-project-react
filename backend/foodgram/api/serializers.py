@@ -164,6 +164,16 @@ class RecipeSerializer(serializers.ModelSerializer):
         new_recipe.save()
         return new_recipe
 
+    def validate_ingredients(self, ingredients):
+        ingredients_ids = [ingredient.get('id')
+                           for ingredient in ingredients]
+        if len(ingredients_ids) > len(set(ingredients_ids)):
+            raise serializers.ValidationError(
+                'Нельзя добавлять один и тот же ингредиет более одного раза.'
+                ' Удалите повторения.'
+            )
+        return ingredients
+
 
 class FilterListSerializer(serializers.ListSerializer):
     """

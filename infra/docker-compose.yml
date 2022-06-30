@@ -13,7 +13,7 @@ services:
     volumes:
       - ../frontend/:/app/result_build/
   backend:
-    image: yuriynekrasov/foodgram:v28.06.2022
+    image: yuriynekrasov/foodgram:latest
     restart: always
     volumes:
       - ./static_value:/app/foodgram/backend_static/
