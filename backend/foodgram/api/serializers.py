@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
+from rest_framework import validators
 
 from api.fields import ImageFromBase64Field
 from api.mixins import FlattenMixinSerializer
@@ -69,6 +70,9 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(
         queryset=models.Ingredient.objects.all().values_list(
             'pk', flat=True),
+        validators=[validators.UniqueValidator(
+            queryset=models.Ingredient.objects.all().values_list('id', flat=True)
+        )]
     )
     name = serializers.ReadOnlyField(source='ingredient.name')
     measurement_unit = serializers.ReadOnlyField(
@@ -163,16 +167,6 @@ class RecipeSerializer(serializers.ModelSerializer):
         new_recipe.image = image
         new_recipe.save()
         return new_recipe
-
-    def validate_ingredients(self, ingredients):
-        ingredients_ids = [ingredient.get('id')
-                           for ingredient in ingredients]
-        if len(ingredients_ids) > len(set(ingredients_ids)):
-            raise serializers.ValidationError(
-                'Нельзя добавлять один и тот же ингредиет более одного раза.'
-                ' Удалите повторения.'
-            )
-        return ingredients
 
 
 class FilterListSerializer(serializers.ListSerializer):
